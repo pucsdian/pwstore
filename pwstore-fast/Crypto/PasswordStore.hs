@@ -104,7 +104,6 @@ module Crypto.PasswordStore (
   ) where
 
 
-import qualified Crypto.Hash as CH
 import qualified Crypto.Hash.SHA256 as H
 import qualified Data.ByteString.Char8 as B
 import qualified Data.ByteString as BS
@@ -121,10 +120,6 @@ import System.IO
 import System.Random
 import Data.Maybe
 import qualified Control.Exception
-import Data.Char
-import Data.List
-import Data.Function
-import qualified Data.Foldable as FL
 
 ---------------------
 -- Cryptographic base
@@ -155,8 +150,7 @@ hmacSHA256 :: ByteString
            -- ^ The clear-text message
            -> ByteString
            -- ^ The encoded message
-hmacSHA256 secret msg =
-    toBytes (CH.hmacGetDigest (CH.hmac secret msg) :: CH.Digest CH.SHA256)
+hmacSHA256 secret msg = H.hmac secret msg
 
 -- | PBKDF2 key-derivation function.
 -- For details see @http://tools.ietf.org/html/rfc2898@.
@@ -422,16 +416,3 @@ modifySTRef' ref f = do
     x' `seq` writeSTRef ref x'
 #endif
 
-#if MIN_VERSION_bytestring(0, 10, 0)
-toStrict :: BL.ByteString -> BS.ByteString
-toStrict = BL.toStrict
-
-fromStrict :: BS.ByteString -> BL.ByteString
-fromStrict = BL.fromStrict
-#else
-toStrict :: BL.ByteString -> BS.ByteString
-toStrict = BS.concat . BL.toChunks
-
-fromStrict :: BS.ByteString -> BL.ByteString
-fromStrict = BL.fromChunks . return
-#endif

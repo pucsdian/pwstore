@@ -30,7 +30,8 @@ Library
   Build-depends:   base >= 4, base < 5, bytestring >= 0.9,
                    base64-bytestring >= 0.1,
                    binary >= 0.5,
-                   cryptohash >= 0.6, random >= 1,
+                   random >= 1,
+                   cryptohash-sha256,
                    byteable >= 0.1
   ghc-options:     -Wall
   
